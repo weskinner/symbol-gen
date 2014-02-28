@@ -9,7 +9,7 @@ class SymbolGenView extends View
     @div "blank"
 
   initialize: (serializeState) ->
-    atom.workspaceView.command "symbol-gen:toggle", => @generate()
+    atom.workspaceView.command "symbol-gen:generate", => @generate()
 
 
   # Returns an object that can be retrieved when package is activated

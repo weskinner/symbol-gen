@@ -1,7 +1,7 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
 'context-menu':
   '.overlayer':
-      'Enable symbol-gen': 'symbol-gen:toggle'
+      'Enable symbol-gen': 'symbol-gen:generate'
 
 'menu': [
   {
@@ -9,7 +9,7 @@
     'submenu': [
       'label': 'symbol-gen'
       'submenu': [
-        { 'label': 'Generate Symbols', 'command': 'symbol-gen:toggle' }
+        { 'label': 'Generate Symbols', 'command': 'symbol-gen:generate' }
       ]
     ]
   }
