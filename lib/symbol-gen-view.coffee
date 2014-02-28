@@ -29,7 +29,7 @@ class SymbolGenView extends View
     else
       deferred = Q.defer()
       atom.workspaceView.append(this)
-      @message.text('Generating Symbols...')
+      @message.text('Generating Symbols\u2026')
       projectPath = atom.project.path
       swapFilePath = path.resolve(projectPath, swapFile)
       tagsFilePath = path.resolve(projectPath, 'tags')
