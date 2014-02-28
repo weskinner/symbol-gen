@@ -14,3 +14,10 @@ Install using the Atom Package Manager.
 ###Shortcut
 
 Hit `cmd-alt-g` to generate tags file for your project.
+
+####Currently Developing
+- Better default tags generation
+- Visual tags generation progress indicator for larger projects
+
+####On the Horizon
+- Update tags file on save of any file in project
