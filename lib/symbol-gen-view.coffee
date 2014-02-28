@@ -27,7 +27,6 @@ class SymbolGenView extends View
       deferred = Q.defer()
       atom.workspaceView.append(this)
       @message.text('Generating Symbols...')
-      tags = []
       command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
       defaultCtagsFile = require.resolve('./.ctags')
       args = ["--options=#{defaultCtagsFile}", '-R']
@@ -36,8 +35,8 @@ class SymbolGenView extends View
       ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
       ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
       ctags.on 'close', (data) =>
-        console.log('Child Process Closed.')
+        console.log('Ctags process finished.  Tags file created.')
         @detach()
-        deferred.resolve(tags)
+        deferred.resolve()
 
       deferred.promise
