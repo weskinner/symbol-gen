@@ -3,7 +3,9 @@
   "main": "./lib/symbol-gen",
   "version": "0.1.3",
   "private": false,
-  "description": "Generate symbols for your project.",
+  "description": "Generate symbols with cmd-alt-g so you fuzzy search for symbols across your project.",
+  "keywords": ["tags", "tag", "ctags", "ctag", "symbol", "symbols", "symbol generator", "tags generator"
+    , "jump to symbol", "go to symbol"],
   "activationEvents": [
     "symbol-gen:toggle"
   ],
