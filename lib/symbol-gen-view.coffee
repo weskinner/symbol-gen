@@ -6,7 +6,8 @@ spawn = require('child_process').spawn
 module.exports =
 class SymbolGenView extends View
   @content: ->
-    @div "blank"
+    @div class: 'symbol-gen overlay from-top mini', =>
+      @div class: 'message', outlet: 'message'
 
   initialize: (serializeState) ->
     atom.workspaceView.command "symbol-gen:generate", => @generate()
@@ -20,17 +21,23 @@ class SymbolGenView extends View
     @detach()
 
   generate: () ->
-    deferred = Q.defer()
-    tags = []
-    command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
-    defaultCtagsFile = require.resolve('./.ctags')
-    args = ["--options=#{defaultCtagsFile}", '-R']
-    ctags = spawn(command, args, {cwd: atom.project.path})
+    if @hasParent()
+      @detatch()
+    else
+      deferred = Q.defer()
+      atom.workspaceView.append(this)
+      @message.text('Generating Symbols...')
+      tags = []
+      command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
+      defaultCtagsFile = require.resolve('./.ctags')
+      args = ["--options=#{defaultCtagsFile}", '-R']
+      ctags = spawn(command, args, {cwd: atom.project.path})
 
-    ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
-    ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
-    ctags.on 'close', (data) ->
-      console.log('Child Process Closed.')
-      deferred.resolve(tags)
+      ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
+      ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
+      ctags.on 'close', (data) =>
+        console.log('Child Process Closed.')
+        @detach()
+        deferred.resolve(tags)
 
-    deferred.promise
+      deferred.promise
