@@ -51,3 +51,5 @@
 --langmap=C++:+.mm
 
 --langmap=Ruby:+(Rakefile)
+
+--exclude=*node_modules/*
