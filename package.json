@@ -1,0 +1,16 @@
+{
+  "name": "symbol-gen",
+  "main": "./lib/symbol-gen",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Generate symbols for your project.",
+  "activationEvents": ["symbol-gen:toggle"],
+  "repository": "https://github.com/atom/symbol-gen",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "q": "1.x"
+  }
+}
