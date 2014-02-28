@@ -5,7 +5,7 @@
   "private": false,
   "description": "Generate symbols for your project.",
   "activationEvents": ["symbol-gen:toggle"],
-  "repository": "https://github.com/atom/symbol-gen",
+  "repository": "https://github.com/weskinner/symbol-gen",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
