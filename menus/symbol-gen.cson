@@ -9,7 +9,7 @@
     'submenu': [
       'label': 'symbol-gen'
       'submenu': [
-        { 'label': 'Toggle', 'command': 'symbol-gen:toggle' }
+        { 'label': 'Generate Symbols', 'command': 'symbol-gen:toggle' }
       ]
     ]
   }
