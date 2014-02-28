@@ -5,6 +5,9 @@ you will be able to find symbols across your project using `cmd-shift-r`.  Symbo
 the configuration [found here](https://github.com/atom/symbols-view/blob/master/lib/.ctags) by default.  However, you can use your own settings by adding
 them to `~/.ctags`.
 
+:exclamation: **Warning**: This project is still in heavy development.  The output tags file can get somewhat polluted
+for larger projects and can grow in size very rapidly.
+
 ###Installing
 
 Install using the Atom Package Manager.
