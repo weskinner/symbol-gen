@@ -1,10 +1,12 @@
 {
   "name": "symbol-gen",
   "main": "./lib/symbol-gen",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "description": "Generate symbols for your project.",
-  "activationEvents": ["symbol-gen:toggle"],
+  "activationEvents": [
+    "symbol-gen:toggle"
+  ],
   "repository": "https://github.com/weskinner/symbol-gen",
   "license": "MIT",
   "engines": {
