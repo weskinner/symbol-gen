@@ -17,7 +17,7 @@
     "go to symbol"
   ],
   "activationEvents": [
-    "symbol-gen:toggle"
+    "symbol-gen:generate"
   ],
   "repository": "https://github.com/weskinner/symbol-gen",
   "license": "MIT",
@@ -25,6 +25,6 @@
     "atom": ">=0.50.0"
   },
   "dependencies": {
-    "q": "1.x"
+    "q": "~1.0.0"
   }
 }
