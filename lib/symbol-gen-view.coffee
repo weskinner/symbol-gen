@@ -25,7 +25,7 @@ class SymbolGenView extends View
 
   generate: () ->
     if @hasParent()
-      @detatch()
+      @detach()
     else
       deferred = Q.defer()
       atom.workspaceView.append(this)
