@@ -6,9 +6,6 @@ the options [found here](https://github.com/weskinner/symbol-gen/blob/master/lib
 However, you can include your own settings by adding them to `~/.ctags` on mac / linux or
 `C:\ctags.conf` on windows.
 
-:exclamation: **Warning**: This project is still in heavy development.  The output tags file can get somewhat polluted
-for larger projects and can grow in size rapidly.
-
 ###Installing
 
 Install using the Atom Package Manager.
