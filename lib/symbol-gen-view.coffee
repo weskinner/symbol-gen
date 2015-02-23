@@ -30,7 +30,7 @@ class SymbolGenView extends View
       deferred = Q.defer()
       atom.workspaceView.append(this)
       @message.text('Generating Symbols\u2026')
-      projectPath = atom.project.path
+      projectPath = atom.project.getPath()
       swapFilePath = path.resolve(projectPath, swapFile)
       tagsFilePath = path.resolve(projectPath, 'tags')
       command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
