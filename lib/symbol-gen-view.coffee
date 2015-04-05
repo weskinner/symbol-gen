@@ -23,30 +23,36 @@ class SymbolGenView extends View
   destroy: ->
     @detach()
 
+  generate_for_project: (deferred, projectPath) ->
+    swapFilePath = path.resolve(projectPath, swapFile)
+    tagsFilePath = path.resolve(projectPath, 'tags')
+    command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
+    defaultCtagsFile = require.resolve('./.ctags')
+    args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
+    ctags = spawn(command, args, {cwd: projectPath})
+
+    ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
+    ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
+    ctags.on 'close', (data) =>
+      console.log('Ctags process finished.  Tags swap file created.')
+      fs.rename swapFilePath, tagsFilePath, (err) =>
+        if err
+          console.log('Error swapping file: ', err)
+        console.log('Tags file swapped.  Generation complete.')
+        @detach()
+        deferred.resolve()
+
   generate: () ->
     if @hasParent()
       @detach()
     else
-      deferred = Q.defer()
+      promises = []
+      self = this
       atom.workspaceView.append(this)
       @message.text('Generating Symbols\u2026')
-      projectPath = atom.project.getPath()
-      swapFilePath = path.resolve(projectPath, swapFile)
-      tagsFilePath = path.resolve(projectPath, 'tags')
-      command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
-      defaultCtagsFile = require.resolve('./.ctags')
-      args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
-      ctags = spawn(command, args, {cwd: projectPath})
-
-      ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
-      ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
-      ctags.on 'close', (data) =>
-        console.log('Ctags process finished.  Tags swap file created.')
-        fs.rename swapFilePath, tagsFilePath, (err) =>
-          if err
-            console.log('Error swapping file: ', err)
-          console.log('Tags file swapped.  Generation complete.')
-          @detach()
-          deferred.resolve()
-
-      deferred.promise
+      projectPaths = atom.project.getPaths()
+      projectPaths.forEach (path) ->
+        p = Q.defer()
+        self.generate_for_project(p, path)
+        promises.push(p)
+      Q.all(promises)
