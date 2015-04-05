@@ -1,5 +1,4 @@
-{$} = require 'atom'
-{View} = require 'atom-space-pen-views'
+{$, View} = require 'atom-space-pen-views'
 path = require('path')
 fs = require('fs')
 Q = require('q')
