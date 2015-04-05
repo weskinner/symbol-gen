@@ -14,7 +14,7 @@ class SymbolGenView extends View
       @div class: 'message', outlet: 'message'
 
   initialize: (serializeState) ->
-    atom.workspaceView.command "symbol-gen:generate", => @generate()
+    atom.commands.add 'atom-workspace', "symbol-gen:generate", => @generate()
 
 
   # Returns an object that can be retrieved when package is activated
