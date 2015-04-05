@@ -1,4 +1,4 @@
-{$, EditorView, View} = require 'atom'
+{$, View} = require 'atom'
 path = require('path')
 fs = require('fs')
 Q = require('q')
