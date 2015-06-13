@@ -1,5 +1,5 @@
 {
-  "name": "symbol-gen-2",
+  "name": "symbol-gen",
   "main": "./lib/symbol-gen",
   "version": "0.3.0",
   "private": false,
@@ -16,7 +16,7 @@
     "jump to symbol",
     "go to symbol"
   ],
-  "repository": "https://github.com/JCCR/symbol-gen",
+  "repository": "https://github.com/weskinner/symbol-gen",
   "license": "MIT",
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
