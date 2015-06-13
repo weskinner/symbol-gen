@@ -1,5 +1,5 @@
 {
-  "name": "symbol-gen",
+  "name": "symbol-gen-2",
   "main": "./lib/symbol-gen",
   "version": "0.3.0",
   "private": false,
@@ -23,5 +23,12 @@
   },
   "dependencies": {
     "q": "~1.0.0"
+  },
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    }
   }
 }

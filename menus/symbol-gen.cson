@@ -3,10 +3,10 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'Symbol Generator'
+      'label': 'Symbols'
       'submenu': [
-        { 'label': 'Enable for Project', 'command': 'symbol-gen:generate' }
-        { 'label': 'Purge Tags', 'command': 'symbol-gen:purge' }
+        { 'label': 'Generate for Project', 'command': 'symbol-gen:generate' }
+        { 'label': 'Purge Generated Tags', 'command': 'symbol-gen:purge' }
       ]
     ]
   }

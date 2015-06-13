@@ -24,6 +24,13 @@ class SymbolGenView
   # Tear down any state and detach
   destroy: ->
 
+  consumeStatusBar: (@statusBar) ->
+    element = document.createElement 'div'
+    element.classList.add('inline-block')
+    element.textContent = 'Generating symbols'
+    element.style.visibility = 'collapse'
+    @statusBarTile = @statusBar.addRightTile(item: element, priority: 100)
+
   watch_for_changes: ->
     atom.commands.add 'atom-workspace', 'core:save', => @check_for_on_save()
     atom.commands.add 'atom-workspace', 'core:save-as', => @check_for_on_save()
@@ -74,10 +81,21 @@ class SymbolGenView
       @isActive = true
       @watch_for_changes()
 
+    isGenerating = true
+    # show status bar tile if it takes a while to generate tags
+    showStatus = =>
+      return unless isGenerating
+      @statusBarTile?.getItem().style.visibility = 'visible'
+    setTimeout showStatus, 300
+
     promises = []
     projectPaths = atom.project.getPaths()
     projectPaths.forEach (path) =>
       p = Q.defer()
       @generate_for_project(p, path)
       promises.push(p)
-    Q.all(promises)
+
+    Q.all(promises).then =>
+      # hide status bar tile
+      @statusBarTile?.getItem().style.visibility = 'collapse'
+      isGenerating = false
