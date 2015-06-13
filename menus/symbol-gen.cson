@@ -1,11 +1,4 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
-'context-menu':
-  'atom-workspace': [
-    {
-      'label': 'Enable symbol-gen'
-      'command': 'symbol-gen:generate'
-    }
-  ]
 'menu': [
   {
     'label': 'Packages'
