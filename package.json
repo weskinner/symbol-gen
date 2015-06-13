@@ -1,7 +1,7 @@
 {
-  "name": "symbol-gen",
+  "name": "auto-symbol-gen",
   "main": "./lib/symbol-gen",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": false,
   "description": "Generate symbols with cmd-alt-g so you can fuzzy search for symbols across your project.",
   "keywords": [
@@ -16,16 +16,12 @@
     "jump to symbol",
     "go to symbol"
   ],
-  "activationEvents": [
-    "symbol-gen:generate"
-  ],
-  "repository": "https://github.com/weskinner/symbol-gen",
+  "repository": "https://github.com/JCCR/symbol-gen",
   "license": "MIT",
   "engines": {
-    "atom": ">=0.50.0"
+    "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
-    "q": "~1.0.0",
-    "atom-space-pen-views": "^2.0.3"
+    "q": "~1.0.0"
   }
 }

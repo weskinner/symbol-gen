@@ -6,24 +6,24 @@ SymbolGen = require '../lib/symbol-gen'
 # or `fdescribe`). Remove the `f` to unfocus the block.
 
 describe "SymbolGen", ->
-  activationPromise = null
+  [workspaceElement, activationPromise] = []
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
+    workspaceElement = atom.views.getView(atom.workspace)
     activationPromise = atom.packages.activatePackage('symbolGen')
 
   describe "when the symbol-gen:toggle event is triggered", ->
     it "attaches and then detaches the view", ->
-      expect(atom.workspaceView.find('.symbol-gen')).not.toExist()
+      expect(workspaceElement.querySelector('.symbol-gen')).not.toExist()
 
       # This is an activation event, triggering it will cause the package to be
       # activated.
-      atom.workspaceView.trigger 'symbol-gen:toggle'
+      atom.commands.dispatch workspaceElement, 'symbol-gen:toggle'
 
       waitsForPromise ->
         activationPromise
 
       runs ->
-        expect(atom.workspaceView.find('.symbol-gen')).toExist()
+        expect(workspaceElement.querySelector('.symbol-gen')).toExist()
         atom.workspaceView.trigger 'symbol-gen:toggle'
-        expect(atom.workspaceView.find('.symbol-gen')).not.toExist()
+        expect(workspaceElement.querySelector('.symbol-gen')).not.toExist()
