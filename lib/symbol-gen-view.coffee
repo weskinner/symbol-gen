@@ -12,6 +12,7 @@ class SymbolGenView
 
   constructor: (serializeState) ->
     atom.commands.add 'atom-workspace', "symbol-gen:generate", => @generate()
+    atom.commands.add 'atom-workspace', "symbol-gen:purge", => @purge()
     @activate_for_projects (activate) =>
       return unless activate
       @isActive = true
@@ -29,6 +30,7 @@ class SymbolGenView
     atom.commands.add 'atom-workspace', 'window:save-all', => @check_for_on_save()
 
   check_for_on_save: ->
+    return unless @isActive
     onDidSave =
       atom.workspace.getActiveTextEditor().onDidSave =>
         @generate()
@@ -41,11 +43,11 @@ class SymbolGenView
       try fs.accessSync tagsFilePath; return true
     callback shouldActivate
 
-  purge_for_project: (deferred, projectPath) ->
+  purge_for_project: (projectPath) ->
     swapFilePath = path.resolve(projectPath, swapFile)
     tagsFilePath = path.resolve(projectPath, 'tags')
-    fs.unlink @tagsFilePath, -> # no-op
-    fs.unlink @swapFilePath, -> # no-op
+    fs.unlink tagsFilePath, -> # no-op
+    fs.unlink swapFilePath, -> # no-op
 
   generate_for_project: (deferred, projectPath) ->
     swapFilePath = path.resolve(projectPath, swapFile)
@@ -55,22 +57,18 @@ class SymbolGenView
     args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
     ctags = spawn(command, args, {cwd: projectPath})
 
-    ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
-    ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
+    ctags.stderr.on 'data', (data) -> console.error('symbol-gen:', 'ctag:stderr ' + data)
     ctags.on 'close', (data) =>
-      console.log('Ctags process finished.  Tags swap file created.')
       fs.rename swapFilePath, tagsFilePath, (err) =>
-        if err
-          console.log('Error swapping file: ', err)
-        console.log('Tags file swapped.  Generation complete.')
-        @detach()
+        if err then console.warn('symbol-gen:', 'Error swapping file: ', err)
         deferred.resolve()
 
   purge: ->
     projectPaths = atom.project.getPaths()
     projectPaths.forEach (path) =>
-      self.purge_for_project(path)
-  
+      @purge_for_project(path)
+    @isActive = false
+
   generate: ->
     if not @isActive
       @isActive = true
@@ -80,6 +78,6 @@ class SymbolGenView
     projectPaths = atom.project.getPaths()
     projectPaths.forEach (path) =>
       p = Q.defer()
-      self.generate_for_project(p, path)
+      @generate_for_project(p, path)
       promises.push(p)
     Q.all(promises)
