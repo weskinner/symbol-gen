@@ -10,7 +10,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'Auto Symbol Generator'
+      'label': 'Symbol Generator'
       'submenu': [
         { 'label': 'Enable for Project', 'command': 'symbol-gen:generate' }
         { 'label': 'Purge Tags', 'command': 'symbol-gen:purge' }
