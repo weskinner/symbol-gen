@@ -1,4 +1,3 @@
-{$, View} = require 'atom-space-pen-views'
 path = require('path')
 fs = require('fs')
 Q = require('q')
@@ -7,21 +6,55 @@ spawn = require('child_process').spawn
 swapFile = '.tags_swap'
 
 module.exports =
-class SymbolGenView extends View
-  @content: ->
-    @div class: 'symbol-gen overlay from-top mini', =>
-      @div class: 'message', outlet: 'message'
+class SymbolGenView
 
-  initialize: (serializeState) ->
+  isActive: false
+
+  constructor: (serializeState) ->
     atom.commands.add 'atom-workspace', "symbol-gen:generate", => @generate()
-
+    atom.commands.add 'atom-workspace', "symbol-gen:purge", => @purge()
+    @activate_for_projects (activate) =>
+      return unless activate
+      @isActive = true
+      @watch_for_changes()
 
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
-    @detach()
+
+  consumeStatusBar: (@statusBar) ->
+    element = document.createElement 'div'
+    element.classList.add('inline-block')
+    element.textContent = 'Generating symbols'
+    element.style.visibility = 'collapse'
+    @statusBarTile = @statusBar.addRightTile(item: element, priority: 100)
+
+  watch_for_changes: ->
+    atom.commands.add 'atom-workspace', 'core:save', => @check_for_on_save()
+    atom.commands.add 'atom-workspace', 'core:save-as', => @check_for_on_save()
+    atom.commands.add 'atom-workspace', 'window:save-all', => @check_for_on_save()
+
+  check_for_on_save: ->
+    return unless @isActive
+    onDidSave =
+      atom.workspace.getActiveTextEditor().onDidSave =>
+        @generate()
+        onDidSave.dispose()
+
+  activate_for_projects: (callback) ->
+    projectPaths = atom.project.getPaths()
+    shouldActivate = projectPaths.some (projectPath) =>
+      tagsFilePath = path.resolve(projectPath, 'tags')
+      try fs.accessSync tagsFilePath; return true
+    callback shouldActivate
+
+  purge_for_project: (projectPath) ->
+    swapFilePath = path.resolve(projectPath, swapFile)
+    tagsFilePath = path.resolve(projectPath, 'tags')
+    fs.unlink tagsFilePath, -> # no-op
+    fs.unlink swapFilePath, -> # no-op
 
   generate_for_project: (deferred, projectPath) ->
     swapFilePath = path.resolve(projectPath, swapFile)
@@ -31,28 +64,38 @@ class SymbolGenView extends View
     args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
     ctags = spawn(command, args, {cwd: projectPath})
 
-    ctags.stdout.on 'data', (data) -> console.log('stdout ' + data)
-    ctags.stderr.on 'data', (data) -> console.log('stderr ' + data)
+    ctags.stderr.on 'data', (data) -> console.error('symbol-gen:', 'ctag:stderr ' + data)
     ctags.on 'close', (data) =>
-      console.log('Ctags process finished.  Tags swap file created.')
       fs.rename swapFilePath, tagsFilePath, (err) =>
-        if err
-          console.log('Error swapping file: ', err)
-        console.log('Tags file swapped.  Generation complete.')
-        @detach()
+        if err then console.warn('symbol-gen:', 'Error swapping file: ', err)
         deferred.resolve()
 
-  generate: () ->
-    if @hasParent()
-      @detach()
-    else
-      promises = []
-      self = this
-      atom.workspaceView.append(this)
-      @message.text('Generating Symbols\u2026')
-      projectPaths = atom.project.getPaths()
-      projectPaths.forEach (path) ->
-        p = Q.defer()
-        self.generate_for_project(p, path)
-        promises.push(p)
-      Q.all(promises)
+  purge: ->
+    projectPaths = atom.project.getPaths()
+    projectPaths.forEach (path) =>
+      @purge_for_project(path)
+    @isActive = false
+
+  generate: ->
+    if not @isActive
+      @isActive = true
+      @watch_for_changes()
+
+    isGenerating = true
+    # show status bar tile if it takes a while to generate tags
+    showStatus = =>
+      return unless isGenerating
+      @statusBarTile?.getItem().style.visibility = 'visible'
+    setTimeout showStatus, 300
+
+    promises = []
+    projectPaths = atom.project.getPaths()
+    projectPaths.forEach (path) =>
+      p = Q.defer()
+      @generate_for_project(p, path)
+      promises.push(p)
+
+    Q.all(promises).then =>
+      # hide status bar tile
+      @statusBarTile?.getItem().style.visibility = 'collapse'
+      isGenerating = false

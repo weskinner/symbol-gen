@@ -1,15 +1,12 @@
 # See https://atom.io/docs/latest/creating-a-package#menus for more details
-'context-menu':
-  '.overlayer':
-      'Enable symbol-gen': 'symbol-gen:generate'
-
 'menu': [
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'symbol-gen'
+      'label': 'Symbols'
       'submenu': [
-        { 'label': 'Generate Symbols', 'command': 'symbol-gen:generate' }
+        { 'label': 'Generate for Project', 'command': 'symbol-gen:generate' }
+        { 'label': 'Purge Generated Tags', 'command': 'symbol-gen:purge' }
       ]
     ]
   }

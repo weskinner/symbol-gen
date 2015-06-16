@@ -11,3 +11,6 @@ module.exports =
 
   serialize: ->
     symbolGenViewState: @symbolGenView.serialize()
+
+  consumeStatusBar: (statusBar) ->
+    @symbolGenView.consumeStatusBar(statusBar)
