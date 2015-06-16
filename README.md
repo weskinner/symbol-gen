@@ -20,8 +20,3 @@ Hit `cmd-alt-g` to generate tags file for your project.  This can take a few mom
 
 The current implementation of Symbols View can take a bit to load a large (>20MB) tags file.  Be patient.
 
-####Currently Developing
-- Better default tags generation
-
-####On the Horizon
-- Update tags file on save of any file in project
