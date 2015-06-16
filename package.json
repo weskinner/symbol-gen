@@ -1,7 +1,7 @@
 {
   "name": "symbol-gen",
   "main": "./lib/symbol-gen",
-  "version": "0.3.1",
+  "version": "1.0.0",
   "private": false,
   "description": "Generate symbols with cmd-alt-g so you can fuzzy search for symbols across your project.",
   "keywords": [
