@@ -25,5 +25,5 @@ describe "SymbolGen", ->
 
       runs ->
         expect(workspaceElement.querySelector('.symbol-gen')).toExist()
-        atom.workspaceView.trigger 'symbol-gen:toggle'
+        atom.views.getView(atom.workspace).trigger 'symbol-gen:toggle'
         expect(workspaceElement.querySelector('.symbol-gen')).not.toExist()
