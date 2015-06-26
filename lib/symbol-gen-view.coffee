@@ -93,7 +93,7 @@ class SymbolGenView
     projectPaths.forEach (path) =>
       p = Q.defer()
       @generate_for_project(p, path)
-      promises.push(p)
+      promises.push(p.promise)
 
     Q.all(promises).then =>
       # hide status bar tile
