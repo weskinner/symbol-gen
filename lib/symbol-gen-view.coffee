@@ -38,10 +38,12 @@ class SymbolGenView
 
   check_for_on_save: ->
     return unless @isActive
-    onDidSave =
-      atom.workspace.getActiveTextEditor().onDidSave =>
-        @generate()
-        onDidSave.dispose()
+    editor = atom.workspace.getActiveTextEditor()
+    if (editor)
+      onDidSave =
+        editor.onDidSave =>
+          @generate()
+          onDidSave.dispose()
 
   activate_for_projects: (callback) ->
     projectPaths = atom.project.getPaths()
