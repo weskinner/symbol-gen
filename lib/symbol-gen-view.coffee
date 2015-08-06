@@ -24,6 +24,9 @@ class SymbolGenView
   # Tear down any state and detach
   destroy: ->
 
+  tagfilePath: ->
+    atom.config.get('symbol-gen.tagFile')
+
   consumeStatusBar: (@statusBar) ->
     element = document.createElement 'div'
     element.classList.add('inline-block')
@@ -46,19 +49,19 @@ class SymbolGenView
   activate_for_projects: (callback) ->
     projectPaths = atom.project.getPaths()
     shouldActivate = projectPaths.some (projectPath) =>
-      tagsFilePath = path.resolve(projectPath, 'tags')
+      tagsFilePath = path.resolve(projectPath, @tagfilePath())
       try fs.accessSync tagsFilePath; return true
     callback shouldActivate
 
   purge_for_project: (projectPath) ->
     swapFilePath = path.resolve(projectPath, swapFile)
-    tagsFilePath = path.resolve(projectPath, 'tags')
+    tagsFilePath = path.resolve(projectPath, @tagfilePath())
     fs.unlink tagsFilePath, -> # no-op
     fs.unlink swapFilePath, -> # no-op
 
   generate_for_project: (deferred, projectPath) ->
     swapFilePath = path.resolve(projectPath, swapFile)
-    tagsFilePath = path.resolve(projectPath, 'tags')
+    tagsFilePath = path.resolve(projectPath, @tagfilePath())
     command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
     defaultCtagsFile = require.resolve('./.ctags')
     args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
