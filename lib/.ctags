@@ -36,4 +36,4 @@
 
 --exclude=*node_modules/*
 
---JavaScript-kinds=fcm
+--JavaScript-kinds=fcmv
