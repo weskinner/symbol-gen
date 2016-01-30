@@ -7,5 +7,8 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'atom-workspace':
+'.platform-win32 atom-workspace, .platform-linux atom-workspace':
+  'ctrl-alt-g': 'symbol-gen:generate'
+
+'.platform-darwin atom-workspace':
   'cmd-alt-g': 'symbol-gen:generate'
