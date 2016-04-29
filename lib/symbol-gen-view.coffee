@@ -66,7 +66,8 @@ class SymbolGenView
     tagsFilePath = path.resolve(projectPath, @tagfilePath())
     command = path.resolve(__dirname, '..', 'vendor', "ctags-#{process.platform}")
     defaultCtagsFile = require.resolve('./.ctags')
-    args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"]
+    excludes = @get_ctags_excludes()
+    args = ["--options=#{defaultCtagsFile}", '-R', "-f#{swapFilePath}"].concat excludes
     ctags = spawn(command, args, {cwd: projectPath})
 
     ctags.stderr.on 'data', (data) -> console.error('symbol-gen:', 'ctag:stderr ' + data)
@@ -75,13 +76,18 @@ class SymbolGenView
         if err then console.warn('symbol-gen:', 'Error swapping file: ', err)
         deferred.resolve()
 
+  get_ctags_excludes: ->
+    config = atom.config.get("core.ignoredNames")
+    config.map (glob) =>
+      "--exclude=#{glob}"
+
   purge: ->
     projectPaths = atom.project.getPaths()
     projectPaths.forEach (path) =>
       @purge_for_project(path)
     @isActive = false
 
-  generate: ->
+  generate: () ->
     if not @isActive
       @isActive = true
       @watch_for_changes()

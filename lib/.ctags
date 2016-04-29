@@ -34,7 +34,6 @@
 
 --langmap=Ruby:+(Rakefile)
 
---exclude=*node_modules/*
 
 --JavaScript-kinds=fcmvp
 
