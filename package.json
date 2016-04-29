@@ -22,8 +22,9 @@
     "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
-    "q": "~1.0.0",
-    "atom-space-pen-views": "^2.0.3"
+    "atom-space-pen-views": "^2.0.3",
+    "ignored": "^2.0.4",
+    "q": "~1.0.0"
   },
   "consumedServices": {
     "status-bar": {
