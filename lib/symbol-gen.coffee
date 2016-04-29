@@ -14,3 +14,8 @@ module.exports =
 
   consumeStatusBar: (statusBar) ->
     @symbolGenView.consumeStatusBar(statusBar)
+
+  config:
+    tagFile:
+      type: 'string',
+      default: '.tags'
