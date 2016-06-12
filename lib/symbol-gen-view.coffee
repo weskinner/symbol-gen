@@ -31,7 +31,7 @@ class SymbolGenView
     element = document.createElement 'div'
     element.classList.add('inline-block')
     element.textContent = 'Generating symbols'
-    element.style.visibility = 'collapse'
+    element.style.display = 'none'
     @statusBarTile = @statusBar.addRightTile(item: element, priority: 100)
 
   watch_for_changes: ->
@@ -101,7 +101,7 @@ class SymbolGenView
     # show status bar tile if it takes a while to generate tags
     showStatus = =>
       return unless isGenerating
-      @statusBarTile?.getItem().style.visibility = 'visible'
+      @statusBarTile?.getItem().style.display = 'inline-block'
     setTimeout showStatus, 300
 
     promises = []
@@ -113,5 +113,5 @@ class SymbolGenView
 
     Q.all(promises).then =>
       # hide status bar tile
-      @statusBarTile?.getItem().style.visibility = 'collapse'
+      @statusBarTile?.getItem().style.display = 'none'
       isGenerating = false
