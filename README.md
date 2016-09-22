@@ -14,7 +14,7 @@ Install using the Atom Package Manager.
 
 ###Shortcut
 
-Hit `cmd-alt-g` to generate tags file for your project.  This can take a few moments.
+Hit `cmd-alt-g`/`ctrl-alt-g` to generate tags file for your project.  This can take a few moments.
 
 ###Configuration
 
