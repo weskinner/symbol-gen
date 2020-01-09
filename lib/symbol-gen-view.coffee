@@ -9,6 +9,7 @@ module.exports =
 class SymbolGenView
 
   isActive: false
+  @isGenerating: false
 
   constructor: (serializeState) ->
     atom.commands.add 'atom-workspace', "symbol-gen:generate", => @generate()
@@ -96,11 +97,13 @@ class SymbolGenView
     if not @isActive
       @isActive = true
       @watch_for_changes()
+      
+    return unless not @isGenerating
 
-    isGenerating = true
+    @isGenerating = true
     # show status bar tile if it takes a while to generate tags
     showStatus = =>
-      return unless isGenerating
+      return unless @isGenerating
       @statusBarTile?.getItem().style.display = 'inline-block'
     setTimeout showStatus, 300
 
@@ -114,4 +117,4 @@ class SymbolGenView
     Q.all(promises).then =>
       # hide status bar tile
       @statusBarTile?.getItem().style.display = 'none'
-      isGenerating = false
+      @isGenerating = false
